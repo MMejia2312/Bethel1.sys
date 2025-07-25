@@ -115,7 +115,6 @@ if ($query_premios && $row = $query_premios->fetch_assoc()) {
             <li><a class="dropdown-item" href="view/lideres.php">Lideres</a></li>
             <li><a class="dropdown-item" href="view/premios.php">Premios</a></li>
             <li><a class="dropdown-item" href="view/Usuarios.php">Usuarios</a></li>
-            <li><a class="dropdown-item" href="view/NivelesUsuarios.php">Niveles Usuarios</a></li>
           </ul>
         </li>
 

@@ -6,10 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario = $_POST['usuario'];
     $contrasena = $_POST['contrasena'];
 
-    $stmt = $conexion->prepare("SELECT u.USUARIO, u.CONTRASENA, u.ESTADO, u.ID_NIVEL, n.DESCRIP 
-                                FROM usuarios u 
-                                LEFT JOIN nivel n ON u.ID_NIVEL = n.ID_NIVEL
-                                WHERE u.USUARIO = ?");
+    $stmt = $conexion->prepare("SELECT * FROM usuarios WHERE USUARIO = ?");
     $stmt->bind_param("s", $usuario);
     $stmt->execute();
     $resultado = $stmt->get_result();
@@ -24,33 +21,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($contrasena === $usuarioData['CONTRASENA']) {
-            $_SESSION['usuario'] = $usuarioData['USUARIO'];
-            $_SESSION['nivel'] = $usuarioData['ID_NIVEL'];
+            // Guardar datos en la sesión
+            $_SESSION['ID_USUARIO'] = $usuarioData['ID_USUARIO'];
+            $_SESSION['ID_LIDER'] = $usuarioData['ID_LIDER'];
+            $_SESSION['ID_NIVEL'] = $usuarioData['ID_NIVEL'];
+            $_SESSION['USUARIO'] = $usuarioData['USUARIO'];
 
-            // Redirigir según nivel
+            // Redirigir según el nivel
             switch ($usuarioData['ID_NIVEL']) {
-                case 1: // Administrador
-                    header("Location: usuarios/Administrador/Inicio.php");
+                case 1:
+                    header("Location: usuarios/Administrador/inicio.php");
                     break;
-                case 2: // Coordinador
-                    header("Location: usuarios/Coordinador/Inicio.php");
+                case 2:
+                    header("Location: usuarios/coordinador/inicio.php");
                     break;
-                case 3: // Líder
-                    header("Location: usuarios/Lider/Inicio.php");
+                case 3:
+                    header("Location: usuarios/lider/inicio.php");
                     break;
                 default:
-                    $_SESSION['error'] = "Nivel no reconocido.";
+                    $_SESSION['error'] = "No tienes un nivel de acceso asignado.";
                     header("Location: index.php");
                     break;
             }
             exit;
-
         } else {
             $_SESSION['error'] = "Contraseña incorrecta.";
             header("Location: index.php");
             exit;
         }
-
     } else {
         $_SESSION['error'] = "Usuario no registrado.";
         header("Location: index.php");

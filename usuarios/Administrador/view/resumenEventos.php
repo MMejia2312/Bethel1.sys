@@ -1,4 +1,10 @@
 <?php
+session_start();
+if (!isset($_SESSION['ID_USUARIO'])) {
+    $_SESSION['error'] = "Debes iniciar sesión primero.";
+    header("Location: ../../../index.php");  
+    exit();
+}
 include '../../../includes/coneccion.php';
 
 // Evitar cache del navegador para prevenir acceso con botón atrás después de cerrar sesión
@@ -6,12 +12,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
-// Verificar si el usuario está logueado
-if (!isset($_SESSION['usuario'])) {
-    // Si no está logueado, redirigir a login
-    header("Location: ../../../index.php");
-    exit;
-}
+
 
 // cerrar sesion//
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
