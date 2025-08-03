@@ -1,9 +1,31 @@
 <?php
+
+session_start();
+if (!isset($_SESSION['ID_USUARIO'])) {
+    $_SESSION['error'] = "Debes iniciar sesión primero.";
+    header("Location: ../../../index.php");  
+    exit();
+}
 /*--------------------------------------------------
   Conexión + (opcional) funciones CRUD
 --------------------------------------------------*/
 include '../../../includes/coneccion.php';
 require '../../../includes/funcions.php'; 
+
+// Evitar cache del navegador para prevenir acceso con botón atrás después de cerrar sesión
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+
+
+// cerrar sesion//
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
+    session_destroy();
+    header("Location: ../../../index.php"); // Cambia a la página de login
+    exit;
+}
+
 // ---------- Agregar ----------//
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['accion'] === 'agregar') {
     agregar_muchacho($_POST['nombre'], $_POST['apellido'], $_POST['departamento'], $_POST['fecha_na']);
@@ -85,10 +107,10 @@ $guardar = $conexion->query($consultaGEN);
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="adminDropdown">
             
-            <li><a class="dropdown-item" href="inventario.php">Inventarios</a></li>
+            <li><a class="dropdown-item" href="Inventario.php">Inventarios</a></li>
             <li><a class="dropdown-item" href="lideres.php">Lideres</a></li>
-            <li><a class="dropdown-item" href="Premios.php">Premios</a></li>
-            <li><a class="dropdown-item" href="usuarios.php">Usuarios</a></li>
+            <li><a class="dropdown-item" href="premios.php">Premios</a></li>
+            <li><a class="dropdown-item" href="Usuarios.php">Usuarios</a></li>
             <li><a class="dropdown-item" href="NivelesUsuarios.php">Niveles Usuarios</a></li>
           </ul>
         </li>
@@ -104,7 +126,9 @@ $guardar = $conexion->query($consultaGEN);
             <li><a class="dropdown-item" href="resumenEventos.php">Resumen de Eventos.</a></li>
           </ul>
         </li>
-
+        <form class="d-flex ms-auto" method="post">
+          <button type="submit" name="logout" class="btn btn-outline-light">Cerrar Sesión</button>
+        </form>
       </ul>
     </div>
   </div>
@@ -167,7 +191,7 @@ $guardar = $conexion->query($consultaGEN);
 
             <!-- Botones Alergias y Premios -->
             <td><a href="alergias.php?id=<?= $row['ID_MUCHACHO'] ?>" class="btn btn-warning btn-sm">Alergias</a></td>
-            <td><a href="premios.php?id=<?= $row['ID_MUCHACHO'] ?>"  class="btn btn-info btn-sm">Premios</a></td>
+            <td><a href="reg_premios.php?id=<?= $row['ID_MUCHACHO'] ?>"  class="btn btn-info btn-sm">Premios</a></td>
 
             <!-- Botones Editar y Eliminar -->
             <td>

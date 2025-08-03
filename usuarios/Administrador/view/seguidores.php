@@ -1,27 +1,70 @@
-<?php 
-// solicita conección con la base de datos
+<?php
+session_start();
+if (!isset($_SESSION['ID_USUARIO'])) {
+    $_SESSION['error'] = "Debes iniciar sesión primero.";
+    header("Location: ../../../index.php");  
+    exit();
+}
+/*--------------------------------------------------
+  Conexión + (opcional) funciones CRUD
+--------------------------------------------------*/
 include '../../../includes/coneccion.php';
-$consultaGEN = "select m.*, d.ID_DEPARTAMENTO, d.NOMBRE_DEP
-from muchachos m
-join departamento d ON m.DEPARTAMENTO = d.ID_DEPARTAMENTO
-where Departamento = '7'";
+require '../../../includes/funcions.php'; 
 
+// Evitar cache del navegador para prevenir acceso con botón atrás después de cerrar sesión
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+
+
+// cerrar sesion//
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
+    session_destroy();
+    header("Location: ../../../index.php"); // Cambia a la página de login
+    exit;
+}
+
+// ---------- Agregar ----------//
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['accion'] === 'agregar') {
+    agregar_muchacho($_POST['nombre'], $_POST['apellido'], $_POST['departamento'], $_POST['fecha_na']);
+    header("Location: seguidores.php?ok=1");
+    exit;
+}
+// ---------- Editar / Eliminar ----------//
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($_POST['accion'] === 'editar') {
+        editar_muchacho($_POST['id'], $_POST['nombre'], $_POST['apellido'],
+                         $_POST['departamento'], $_POST['fecha_na']);
+        header('Location: seguidores.php?ok=1'); exit;
+    }
+    if ($_POST['accion'] === 'eliminar') {
+        eliminar_muchacho($_POST['id']);
+        header('Location: seguidores.php?eliminado=1'); exit;
+    }
+}
+//----------------------------------------------------------------//
+
+// Consulta seguidores (Departamento 5)
+$consultaGEN = "SELECT m.*, d.ID_DEPARTAMENTO, d.NOMBRE_DEP
+                FROM muchachos m
+                JOIN departamento d ON m.DEPARTAMENTO = d.ID_DEPARTAMENTO
+                WHERE m.DEPARTAMENTO = '7'";
 $guardar = $conexion->query($consultaGEN);
 ?>
-
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Registros Seguidores Bethel 1</title>
-    <link  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    </head>
-  <body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registros seguidores Bethel 1</title>
 
-   <!-- Barra de navegación superior -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="bg-dark text-light">
+
+<!-- Barra de navegación superior -->
 <nav class="navbar navbar-expand-lg bg-dark navbar-dark " >
   <div class="container ">
 
@@ -39,13 +82,13 @@ $guardar = $conexion->query($consultaGEN);
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
 
-        <!-- ▼ Dropdown : Unidades -->
+        <!-- Dropdown : Departamentos -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="unidadesDropdown"
+          <a class="nav-link dropdown-toggle" href="#" id="departamentoDropdown"
              role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Muchachos
           </a>
-          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="unidadesDropdown">
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="departamentoDropdown">
             <li><a class="dropdown-item" href="navegantes.php">Navegantes</a></li>
             <li><a class="dropdown-item" href="pioneros.php">Pioneros</a></li>
             <li><a class="dropdown-item" href="pioneras.php">Pioneras</a></li>
@@ -55,7 +98,7 @@ $guardar = $conexion->query($consultaGEN);
           </ul>
         </li>
 
-        <!-- ▼ Dropdown : Administración -->
+        <!-- Dropdown : Administración -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="adminDropdown"
              role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -63,109 +106,220 @@ $guardar = $conexion->query($consultaGEN);
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="adminDropdown">
             
-            <li><a class="dropdown-item" href="insumos.php">Insumos</a></li>
-            <li><a class="dropdown-item" href="informacion.php">Información</a></li>
+            <li><a class="dropdown-item" href="Inventario.php">Inventarios</a></li>
+            <li><a class="dropdown-item" href="lideres.php">Lideres</a></li>
+            <li><a class="dropdown-item" href="premios.php">Premios</a></li>
+            <li><a class="dropdown-item" href="Usuarios.php">Usuarios</a></li>
+            <li><a class="dropdown-item" href="NivelesUsuarios.php">Niveles Usuarios</a></li>
           </ul>
         </li>
 
+        <!-- Dropdown : Eventos -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="eventosDropdown"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Eventos
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="eventosDropdown">
+            <li><a class="dropdown-item" href="eventos.php">Lista de Eventos</a></li>
+            <li><a class="dropdown-item" href="resumenEventos.php">Resumen de Eventos.</a></li>
+          </ul>
+        </li>
+        <form class="d-flex ms-auto" method="post">
+          <button type="submit" name="logout" class="btn btn-outline-light">Cerrar Sesión</button>
+        </form>
       </ul>
     </div>
   </div>
 </nav>
 <!-- FIN barra de navegación superior -->
 
+<!-- ========= REGISTRO seguidores ========= -->
+<section class="bg-dark text-light text-center p-5">
+  <div class="container" id="Tablaseguidores">
+    <h1 class="my-5"><span style="color:rgba(255,255,0,.9)">Registro de Seguidores</span></h1>
 
- <!--Registros Seguidores-->
- <section class="bg-dark text-light text-center p-5">
-  <div class="container " id="TablaSeguidores" >
-    <h1 class="my-5"><span style="color:rgba(255, 255, 0, 0.911);">Registro Seguidores</span></h1>
-    <!--Filtros-->
-    
-    <div class="d-sm-flex align-item-center justify-content">
-      <div class="p-2">
-        <h2>Filtros</h2>
-      </div>
-      
-      
-      <div class="dropdown p-2" style="max-width: 350px">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Filtrar por
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">Predeterminado</a></li>
-          <li><a class="dropdown-item" href="#">Nombre</a></li>
-          <li><a class="dropdown-item" href="#">Apellido</a></li>
-          <li><a class="dropdown-item" href="#">Edad</a></li>
-          <li><a class="dropdown-item" href="#">Padres</a></li>
-        </ul>
-      </div>
+    <!-- Filtros + Botón Agregar -->
+    <div class="d-sm-flex align-items-center justify-content">
+      <!-- Búsqueda en vivo -->
+      <input type="text"
+            id="tableSearch"
+            class="form-control me-2 mb-2"
+            style="max-width:240px"
+            placeholder="Buscar…">
 
-      <div class="dropdown p-2">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Ordenar
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">Predeterminado</a></li>
-          <li><a class="dropdown-item" href="#">Ascendente</a></li>
-        </ul>
+      <!-- Ordenar por nombre asc/desc -->
+      <select id="tableSort" class="form-select mb-2" style="max-width:180px">
+        <option value="">Ordenar…</option>
+        <option value="asc">Nombre A → Z</option>
+        <option value="desc">Nombre Z → A</option>
+      </select>
 
-            <!-- Botón que lanza el modal de agregar muchachos-->
-            <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modalMuchacho">
-              <i class="fa fa-plus me-1"></i> Agregar
-            </button>
-            <?php include "agregar_muchachos.php"; ?>
-      </div>
+
+      <!-- Botón Agregar (abre modal de agregar muchacho) -->
+      <button type="button" class="btn btn-success mb-3"
+              data-bs-toggle="modal" data-bs-target="#modalMuchacho">
+        <i class="fa fa-plus me-1"></i> Agregar
+      </button>
+      <?php include "agregar_muchachos.php"; ?>
     </div>
-    <!--FIN Filtros-->
-    <!-- tabla -->
-        <table class="table" >
-          <thead style="color:rgb(255, 255, 0);">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Nombre</th>
-              <th scope="col">Apellido</th>
-              <th scope="col">Departamento</th>
-              <th scope="col">Fecha de nacimiento</th>
-              <th scope="col">Alergias</th>
-              <th scope="col">Premios</th>
-              <th scope="col">Acciones</th>
-              
-            </tr>
-          </thead>
-          <tbody style="color:#ffffff;">
-          <?php while ($row = $guardar->fetch_assoc()) { ?>
-        <tr>
-          <td><?php echo $row['ID_MUCHACHO']; ?></td>
-          <td><?php echo $row['NOMBRE_MUC']; ?></td>
-          <td><?php echo $row['APELLIDO_MUC']; ?></td>
-          <td><?php echo $row['NOMBRE_DEP']; ?></td>
-          <td><?php echo $row['FECHA_NA']; ?></td>
-          <th scope="col"><button type="button" class="btn btn-primary">
-              <span class="glyphicon glyphicon-plus"></span> Alergias <i class="fa fa-plus"></i> </a></button>
-          </th>
-          <th scope="col"><button type="button" class="btn btn-success" data-toggle="modal" data-target="#grado">
-                    <span class="glyphicon glyphicon-plus"></span> Premios <i class="fa fa-plus"></i> </a></button>
-          </th>
-          <th scope="col"><button type="button" class="btn btn-warning" data-toggle="modal" data-target="#grado">
-                    <span class="glyphicon glyphicon-plus"></span> Editar <i class="fa fa-plus"></i> </a></button>
-            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#grado">
-                    <span class="glyphicon glyphicon-plus"></span> ELIMINAR <i class="fa fa-plus"></i> </a></button>
-            </th>
-            
-        </tr>
-        <?php } ?>
-              
-          </tbody>
-        </table>
-        <!--FIN tabla aun por conectar-->
-    <!--FIN Registro de Seguidores aun por conectar-->
-  </div>
+
+    <!-- ======= TABLA ======= -->
+    <div class="table-responsive">
+      <table class="table bg-dark">
+        <thead style="color:rgb(255,255,0)">
+          <tr>
+            <!-- th>#</th -->
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Departamento</th>
+            <th>Fecha&nbsp;nacimiento</th>
+            <th>Alergias</th>
+            <th>Premios</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody style="color:rgb(255,255,0)">
+        <?php while ($row = $guardar->fetch_assoc()): ?>
+          <tr>
+            <!-- td><?= $row['ID_MUCHACHO'] ?></td -->
+            <td><?= htmlspecialchars($row['NOMBRE_MUC']) ?></td>
+            <td><?= htmlspecialchars($row['APELLIDO_MUC']) ?></td>
+            <td><?= htmlspecialchars($row['NOMBRE_DEP']) ?></td>
+            <td><?= htmlspecialchars($row['FECHA_NA']) ?></td>
+
+            <!-- Botones Alergias y Premios -->
+            <td><a href="alergias.php?id=<?= $row['ID_MUCHACHO'] ?>" class="btn btn-warning btn-sm">Alergias</a></td>
+            <td><a href="reg_premios.php?id=<?= $row['ID_MUCHACHO'] ?>"  class="btn btn-info btn-sm">Premios</a></td>
+
+            <!-- Botones Editar y Eliminar -->
+            <td>
+              <!-- Editar → modal reutilizable -->
+              <button class="btn btn-primary btn-sm"
+                      data-bs-toggle="modal" data-bs-target="#modalEditar"
+                      data-id="<?= $row['ID_MUCHACHO'] ?>"
+                      data-nombre="<?= htmlspecialchars($row['NOMBRE_MUC']) ?>"
+                      data-apellido="<?= htmlspecialchars($row['APELLIDO_MUC']) ?>"
+                      data-departamento="<?= htmlspecialchars($row['NOMBRE_DEP']) ?>"
+                      data-fecha="<?= $row['FECHA_NA'] ?>">
+                Editar
+              </button>
+
+              <!-- Eliminar → confirm() -->
+              <form method="post" class="d-inline"
+                    onsubmit="return confirm('¿Seguro que deseas eliminar este registro?');">
+                <input type="hidden" name="accion" value="eliminar">
+                <input type="hidden" name="id" value="<?= $row['ID_MUCHACHO'] ?>">
+                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+              </form>
+            </td>
+          </tr>
+        <?php endwhile; ?>
+        </tbody>
+      </table>
+    </div><!-- /.table-responsive -->
+
+  </div><!-- /.container -->
 </section>
-<!--FIN Registros Seguidores-->
 
+<!-- ======= MODAL REUTILIZABLE DE EDICIÓN ======= -->
+<div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-light">
+      <form method="post">
+        <input type="hidden" name="accion" value="editar">
+        <input type="hidden" name="id" id="edit-id">
 
+        <div class="modal-header">
+          <h5 class="modal-title">Editar Muchacho</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
 
- <!-- redes sociales-->
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" name="nombre" id="edit-nombre" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Apellido</label>
+            <input type="text" name="apellido" id="edit-apellido" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Departamento</label>
+           <select name="departamento" id="edit-departamento" class="form-select" required>
+              <?php
+                $departamentos = $conexion->query("SELECT ID_DEPARTAMENTO, NOMBRE_DEP FROM departamento");
+                while ($dep = $departamentos->fetch_assoc()):
+              ?>
+                <option value="<?= $dep['ID_DEPARTAMENTO'] ?>">
+                  <?= htmlspecialchars($dep['NOMBRE_DEP']) ?>
+                </option>
+              <?php endwhile; ?>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Fecha de nacimiento</label>
+            <input type="date" name="fecha_na" id="edit-fecha" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Guardar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ========= Script para rellenar el modal de edición ========= -->
+<script>
+document.getElementById('modalEditar').addEventListener('show.bs.modal', e => {
+  const btn = e.relatedTarget;
+  document.getElementById('edit-id').value           = btn.dataset.id;
+  document.getElementById('edit-nombre').value       = btn.dataset.nombre;
+  document.getElementById('edit-apellido').value     = btn.dataset.apellido;
+  document.getElementById('edit-departamento').value = btn.dataset.departamento;
+  document.getElementById('edit-fecha').value        = btn.dataset.fecha;
+});
+</script>
+
+<script>
+(() => {
+  /* ------------- Referencias ------------- */
+  const searchInput = document.getElementById('tableSearch');
+  const sortSelect  = document.getElementById('tableSort');
+  const tbody       = document.querySelector('#Tablaseguidores tbody');
+
+  /* ------------- Búsqueda ------------- */
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.toLowerCase();
+    for (const row of tbody.rows) {
+      // concatena el texto de todas las celdas de la fila
+      const text = row.innerText.toLowerCase();
+      row.style.display = text.includes(q) ? '' : 'none';
+    }
+  });
+
+  /* ------------- Orden asc/desc ------------- */
+  sortSelect.addEventListener('change', () => {
+    const rows = Array.from(tbody.rows)
+                       .filter(r => r.style.display !== 'none'); // solo visibles
+    rows.sort((a, b) => {
+      const aName = a.cells[1].innerText.trim().toLowerCase(); // columna Nombre
+      const bName = b.cells[1].innerText.trim().toLowerCase();
+      if (aName === bName) return 0;
+      return sortSelect.value === 'asc'
+             ? aName.localeCompare(bName)
+             : bName.localeCompare(aName);
+    });
+    // re‑añade las filas ordenadas
+    rows.forEach(r => tbody.appendChild(r));
+  });
+})();
+</script>
+
+<!-- redes sociales-->
 <section class="bg-dark text-light text-center p-5">
   <div class="container " id="contacto" >
     <h1 class="my-5"><span style="color:rgba(255, 255, 0, 0.911);">Nuestras Redes Sociales</span></h1>
@@ -208,4 +362,7 @@ $guardar = $conexion->query($consultaGEN);
 </footer>
 </section>
 <!--FIN Foother-->
-  </body>
+
+
+</body>
+</html>
