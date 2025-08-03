@@ -1,4 +1,10 @@
 <?php
+session_start();
+if (!isset($_SESSION['ID_USUARIO'])) {
+    $_SESSION['error'] = "Debes iniciar sesión primero.";
+    header("Location: ../../../index.php");  
+    exit();
+}
 include '../../../includes/coneccion.php';
 require '../../../includes/funcions.php';
 
@@ -7,12 +13,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
-// Verificar si el usuario está logueado
-if (!isset($_SESSION['usuario'])) {
-    // Si no está logueado, redirigir a login
-    header("Location: ../../../index.php");
-    exit;
-}
+
 
 // cerrar sesion//
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
@@ -112,7 +113,6 @@ $usuarios = $conexion->query($sql);
             <li><a class="dropdown-item" href="lideres.php">Lideres</a></li>
             <li><a class="dropdown-item" href="premios.php">Premios</a></li>
             <li><a class="dropdown-item" href="Usuarios.php">Usuarios</a></li>
-            <li><a class="dropdown-item" href="NivelesUsuarios.php">Niveles Usuarios</a></li>
           </ul>
         </li>
 
@@ -168,14 +168,14 @@ $usuarios = $conexion->query($sql);
             <td><?= htmlspecialchars($u['ESTADO_US']) ?></td>
             <td>
               <!-- Editar -->
-              <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditar<?= $u['ID_USUARIO'] ?>">Editar</button>
+              <!--button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditar<?= $u['ID_USUARIO'] ?>">Editar</button-->
 
               <!-- Eliminar -->
-              <form method="post" class="d-inline" onsubmit="return confirm('¿Seguro que deseas eliminar este usuario?');">
+              <!--form method="post" class="d-inline" onsubmit="return confirm('¿Seguro que deseas eliminar este usuario?');">
                 <input type="hidden" name="accion" value="eliminar">
                 <input type="hidden" name="id" value="<?= $u['ID_USUARIO'] ?>">
                 <button class="btn btn-danger btn-sm">Eliminar</button>
-              </form>
+              </form-->
 
               <!-- Activar/Desactivar -->
               <form method="post" class="d-inline">

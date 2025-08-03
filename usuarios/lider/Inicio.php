@@ -1,20 +1,25 @@
 <?php
+
+session_start();
+if (!isset($_SESSION['ID_USUARIO'])) {
+    $_SESSION['error'] = "Debes iniciar sesión primero.";
+    header("Location: ../../index.php");  // Ajusta ruta si es necesario
+    exit();
+}
+
+
+
 include '../../includes/coneccion.php';
 
 
-session_start();
+// session_start();
 
 // Evitar cache del navegador para prevenir acceso con botón atrás después de cerrar sesión
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
-// Verificar si el usuario está logueado
-if (!isset($_SESSION['usuario'])) {
-    // Si no está logueado, redirigir a login
-    header("Location: ../../index.php");
-    exit;
-}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
     session_destroy();
@@ -100,22 +105,6 @@ if ($query_premios && $row = $query_premios->fetch_assoc()) {
             <li><a class="dropdown-item" href="view/seguidores.php">Seguidores</a></li>
             <li><a class="dropdown-item" href="view/señoritas.php">Señoritas</a></li>
             <li><a class="dropdown-item" href="view/exploradores.php">Exploradores</a></li>
-          </ul>
-        </li>
-
-        <!-- Dropdown : Administración -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="adminDropdown"
-             role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Administración
-          </a>
-          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="adminDropdown">
-            
-            <li><a class="dropdown-item" href="view/Inventario.php">Inventarios</a></li>
-            <li><a class="dropdown-item" href="view/lideres.php">Lideres</a></li>
-            <li><a class="dropdown-item" href="view/premios.php">Premios</a></li>
-            <li><a class="dropdown-item" href="view/Usuarios.php">Usuarios</a></li>
-            <li><a class="dropdown-item" href="view/NivelesUsuarios.php">Niveles Usuarios</a></li>
           </ul>
         </li>
 

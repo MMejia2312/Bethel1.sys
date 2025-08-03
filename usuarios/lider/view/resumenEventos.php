@@ -1,4 +1,10 @@
 <?php
+session_start();
+if (!isset($_SESSION['ID_USUARIO'])) {
+    $_SESSION['error'] = "Debes iniciar sesión primero.";
+    header("Location: ../../../index.php");  
+    exit();
+}
 include '../../../includes/coneccion.php';
 
 // Evitar cache del navegador para prevenir acceso con botón atrás después de cerrar sesión
@@ -6,12 +12,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
-// Verificar si el usuario está logueado
-if (!isset($_SESSION['usuario'])) {
-    // Si no está logueado, redirigir a login
-    header("Location: ../../../index.php");
-    exit;
-}
+
 
 // cerrar sesion//
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
@@ -100,24 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['completar_evento'])) 
             <li><a class="dropdown-item" href="señoritas.php">Señoritas</a></li>
             <li><a class="dropdown-item" href="exploradores.php">Exploradores</a></li>
           </ul>
-        </li>
-
-        <!-- Dropdown : Administración -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="adminDropdown"
-             role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Administración
-          </a>
-          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="adminDropdown">
-            
-            <li><a class="dropdown-item" href="Inventario.php">Inventarios</a></li>
-            <li><a class="dropdown-item" href="lideres.php">Lideres</a></li>
-            <li><a class="dropdown-item" href="premios.php">Premios</a></li>
-            <li><a class="dropdown-item" href="Usuarios.php">Usuarios</a></li>
-            <li><a class="dropdown-item" href="NivelesUsuarios.php">Niveles Usuarios</a></li>
-          </ul>
-        </li>
-
+        </li> 
+           
         <!-- Dropdown : Eventos -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="eventosDropdown"
@@ -137,6 +122,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['completar_evento'])) 
   </div>
 </nav>
 <!-- FIN barra de navegación superior -->
+
+
 
 <div class="container my-5">
     <h1 class="mb-4 text-center"><span style="color:rgba(255,255,0,.9)">Resumen de Eventos</span></h1>

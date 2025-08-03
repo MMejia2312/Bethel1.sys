@@ -1,4 +1,11 @@
 <?php
+
+session_start();
+if (!isset($_SESSION['ID_USUARIO'])) {
+    $_SESSION['error'] = "Debes iniciar sesión primero.";
+    header("Location: ../../../index.php");  
+    exit();
+}
 /*--------------------------------------------------
   Conexión + (opcional) funciones CRUD
 --------------------------------------------------*/
@@ -10,12 +17,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
-// Verificar si el usuario está logueado
-if (!isset($_SESSION['usuario'])) {
-    // Si no está logueado, redirigir a login
-    header("Location: ../../../index.php");
-    exit;
-}
+
 
 // cerrar sesion//
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
@@ -95,24 +97,8 @@ $guardar = $conexion->query($consultaGEN);
             <li><a class="dropdown-item" href="señoritas.php">Señoritas</a></li>
             <li><a class="dropdown-item" href="exploradores.php">Exploradores</a></li>
           </ul>
-        </li>
-
-        <!-- Dropdown : Administración -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="adminDropdown"
-             role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Administración
-          </a>
-          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="adminDropdown">
-            
-            <li><a class="dropdown-item" href="Inventario.php">Inventarios</a></li>
-            <li><a class="dropdown-item" href="lideres.php">Lideres</a></li>
-            <li><a class="dropdown-item" href="premios.php">Premios</a></li>
-            <li><a class="dropdown-item" href="Usuarios.php">Usuarios</a></li>
-            <li><a class="dropdown-item" href="NivelesUsuarios.php">Niveles Usuarios</a></li>
-          </ul>
-        </li>
-
+        </li> 
+           
         <!-- Dropdown : Eventos -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="eventosDropdown"
