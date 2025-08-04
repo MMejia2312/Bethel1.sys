@@ -88,7 +88,7 @@ $guardar = $conexion->query($consultaGEN);
             <li><a class="dropdown-item" href="pioneros.php">Pioneros</a></li>
             <li><a class="dropdown-item" href="pioneras.php">Pioneras</a></li>
             <li><a class="dropdown-item" href="seguidores.php">Seguidores</a></li>
-            <li><a class="dropdown-item" href="señoritas.php">Senoritas</a></li>
+            <li><a class="dropdown-item" href="senoritas.php">Senoritas</a></li>
             <li><a class="dropdown-item" href="exploradores.php">Exploradores</a></li>
           </ul>
         </li>
@@ -164,8 +164,8 @@ $guardar = $conexion->query($consultaGEN);
             <td><?= $row['ID_INSUMO'] ?></td>
             <td><?= htmlspecialchars($row['NOMBRE']) ?></td>
             <td><?= htmlspecialchars($row['DESCRIPCION']) ?></td>
-            <td><?= htmlspecialchars($row['ENTRADA']) ?></td>
-            <td><?= htmlspecialchars($row['MANTENIMIENTO']) ?></td>
+            <td><?= htmlspecialchars($row['ENTRADA'] ?? '') ?></td>
+            <td><?= htmlspecialchars($row['MANTENIMIENTO'] ?? '') ?></td>
             <td>
             <a href="salida_insumos.php?id=<?= $row['ID_INSUMO'] ?>" class="btn btn-warning btn-sm">Salida</a>
             </td>

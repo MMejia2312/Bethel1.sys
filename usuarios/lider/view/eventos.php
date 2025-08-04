@@ -85,11 +85,11 @@ $guardar = $conexion->query($consultaGEN);
             <li><a class="dropdown-item" href="pioneros.php">Pioneros</a></li>
             <li><a class="dropdown-item" href="pioneras.php">Pioneras</a></li>
             <li><a class="dropdown-item" href="seguidores.php">Seguidores</a></li>
-            <li><a class="dropdown-item" href="señoritas.php">Señoritas</a></li>
+            <li><a class="dropdown-item" href="senoritas.php">Señoritas</a></li>
             <li><a class="dropdown-item" href="exploradores.php">Exploradores</a></li>
           </ul>
-        </li> 
-           
+        </li>
+
         <!-- Dropdown : Eventos -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="eventosDropdown"
@@ -109,7 +109,6 @@ $guardar = $conexion->query($consultaGEN);
   </div>
 </nav>
 <!-- FIN barra de navegación superior -->
-
 
 <section class="bg-dark text-light text-center p-5">
   <div class="container" id="TablaEventos">
@@ -141,7 +140,7 @@ $guardar = $conexion->query($consultaGEN);
         <?php while ($row = $guardar->fetch_assoc()): ?>
           <tr>
             <td><?= htmlspecialchars($row['NOMBRE_EVENTO']) ?></td>
-            <td><?= htmlspecialchars($row['FECHA']) ?></td>
+            <td><?= htmlspecialchars($row['FECHA'] ?? '') ?></td>
             <td><?= htmlspecialchars($row['LUGAR']) ?></td>
             <td><?= htmlspecialchars($row['ESTADO']) ?></td>
             <td>

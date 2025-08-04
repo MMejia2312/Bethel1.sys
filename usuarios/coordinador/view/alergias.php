@@ -88,7 +88,7 @@ $registros = $conexion->query("SELECT * FROM datos_med WHERE ID_MUCHACHO = $id")
             <li><a class="dropdown-item" href="pioneros.php">Pioneros</a></li>
             <li><a class="dropdown-item" href="pioneras.php">Pioneras</a></li>
             <li><a class="dropdown-item" href="seguidores.php">Seguidores</a></li>
-            <li><a class="dropdown-item" href="señoritas.php">Señoritas</a></li>
+            <li><a class="dropdown-item" href="senoritas.php">Señoritas</a></li>
             <li><a class="dropdown-item" href="exploradores.php">Exploradores</a></li>
           </ul>
         </li>

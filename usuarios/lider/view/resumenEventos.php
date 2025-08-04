@@ -98,11 +98,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['completar_evento'])) 
             <li><a class="dropdown-item" href="pioneros.php">Pioneros</a></li>
             <li><a class="dropdown-item" href="pioneras.php">Pioneras</a></li>
             <li><a class="dropdown-item" href="seguidores.php">Seguidores</a></li>
-            <li><a class="dropdown-item" href="señoritas.php">Señoritas</a></li>
+            <li><a class="dropdown-item" href="senoritas.php">Señoritas</a></li>
             <li><a class="dropdown-item" href="exploradores.php">Exploradores</a></li>
           </ul>
-        </li> 
-           
+        </li>
+
+
         <!-- Dropdown : Eventos -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="eventosDropdown"
@@ -122,8 +123,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['completar_evento'])) 
   </div>
 </nav>
 <!-- FIN barra de navegación superior -->
-
-
 
 <div class="container my-5">
     <h1 class="mb-4 text-center"><span style="color:rgba(255,255,0,.9)">Resumen de Eventos</span></h1>
@@ -145,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['completar_evento'])) 
                     <?php $resumen = obtener_resumen_evento($conexion, $evento['ID_EVENTO']); ?>
                     <tr>
                         <td><?= htmlspecialchars($evento['NOMBRE_EVENTO']) ?></td>
-                        <td><?= htmlspecialchars($evento['FECHA']) ?></td>
+                        <td><?= htmlspecialchars($evento['FECHA'] ?? '') ?></td>
                         <td><?= htmlspecialchars($evento['ESTADO']) ?></td>
                         <td><?= $resumen['total_asistentes'] ?></td>
                         <td>$<?= number_format($resumen['total_abonos'], 2) ?></td>

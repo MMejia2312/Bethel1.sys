@@ -93,7 +93,7 @@ $guardar = $conexion->query($consultaGEN);
             <li><a class="dropdown-item" href="pioneros.php">Pioneros</a></li>
             <li><a class="dropdown-item" href="pioneras.php">Pioneras</a></li>
             <li><a class="dropdown-item" href="seguidores.php">Seguidores</a></li>
-            <li><a class="dropdown-item" href="señoritas.php">Señoritas</a></li>
+            <li><a class="dropdown-item" href="senoritas.php">Señoritas</a></li>
             <li><a class="dropdown-item" href="exploradores.php">Exploradores</a></li>
           </ul>
         </li>
@@ -110,7 +110,6 @@ $guardar = $conexion->query($consultaGEN);
             <li><a class="dropdown-item" href="lideres.php">Lideres</a></li>
             <li><a class="dropdown-item" href="premios.php">Premios</a></li>
             <li><a class="dropdown-item" href="Usuarios.php">Usuarios</a></li>
-            <li><a class="dropdown-item" href="NivelesUsuarios.php">Niveles Usuarios</a></li>
           </ul>
         </li>
 
@@ -186,7 +185,8 @@ $guardar = $conexion->query($consultaGEN);
             <td><?= htmlspecialchars($row['NOMBRE_MUC']) ?></td>
             <td><?= htmlspecialchars($row['APELLIDO_MUC']) ?></td>
             <td><?= htmlspecialchars($row['NOMBRE_DEP']) ?></td>
-            <td><?= htmlspecialchars($row['FECHA_NA']) ?></td>
+            <td><?= htmlspecialchars($row['FECHA_NA'] ?? '') ?></td>
+
 
             <!-- Botones Alergias y Premios -->
             <td><a href="alergias.php?id=<?= $row['ID_MUCHACHO'] ?>" class="btn btn-warning btn-sm">Alergias</a></td>

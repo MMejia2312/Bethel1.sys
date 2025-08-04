@@ -112,11 +112,13 @@ $asistentes = $conexion->query("SELECT ae.*, l.NOMBRE_LI, m.NOMBRE_MUC FROM asis
             <li><a class="dropdown-item" href="pioneros.php">Pioneros</a></li>
             <li><a class="dropdown-item" href="pioneras.php">Pioneras</a></li>
             <li><a class="dropdown-item" href="seguidores.php">Seguidores</a></li>
-            <li><a class="dropdown-item" href="señoritas.php">Señoritas</a></li>
+            <li><a class="dropdown-item" href="senoritas.php">Señoritas</a></li>
             <li><a class="dropdown-item" href="exploradores.php">Exploradores</a></li>
           </ul>
-        </li> 
-           
+        </li>
+
+
+
         <!-- Dropdown : Eventos -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="eventosDropdown"
@@ -136,7 +138,6 @@ $asistentes = $conexion->query("SELECT ae.*, l.NOMBRE_LI, m.NOMBRE_MUC FROM asis
   </div>
 </nav>
 <!-- FIN barra de navegación superior -->
-
 
 <div class="container mt-5">
     <h1 class="mb-4">Asistentes al Evento: <?= htmlspecialchars($evento['NOMBRE_EVENTO']) ?></h1>

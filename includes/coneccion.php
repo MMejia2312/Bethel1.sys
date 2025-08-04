@@ -15,5 +15,5 @@ if (!$conexion) {
     echo "No se realizo la conexion a la basa de datos, el error fue:" .
         mysqli_connect_error();
 }
-
+mysqli_set_charset($conexion, "utf8mb4");
 ?>

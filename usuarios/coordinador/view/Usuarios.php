@@ -96,7 +96,7 @@ $usuarios = $conexion->query($sql);
             <li><a class="dropdown-item" href="pioneros.php">Pioneros</a></li>
             <li><a class="dropdown-item" href="pioneras.php">Pioneras</a></li>
             <li><a class="dropdown-item" href="seguidores.php">Seguidores</a></li>
-            <li><a class="dropdown-item" href="señoritas.php">Señoritas</a></li>
+            <li><a class="dropdown-item" href="senoritas.php">Señoritas</a></li>
             <li><a class="dropdown-item" href="exploradores.php">Exploradores</a></li>
           </ul>
         </li>
@@ -167,15 +167,7 @@ $usuarios = $conexion->query($sql);
             <td><?= htmlspecialchars($u['DESCRIP']) ?></td>
             <td><?= htmlspecialchars($u['ESTADO_US']) ?></td>
             <td>
-              <!-- Editar -->
-              <!--button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditar<?= $u['ID_USUARIO'] ?>">Editar</button-->
-
-              <!-- Eliminar -->
-              <!--form method="post" class="d-inline" onsubmit="return confirm('¿Seguro que deseas eliminar este usuario?');">
-                <input type="hidden" name="accion" value="eliminar">
-                <input type="hidden" name="id" value="<?= $u['ID_USUARIO'] ?>">
-                <button class="btn btn-danger btn-sm">Eliminar</button>
-              </form-->
+              
 
               <!-- Activar/Desactivar -->
               <form method="post" class="d-inline">

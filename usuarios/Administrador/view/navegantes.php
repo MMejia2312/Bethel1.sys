@@ -187,7 +187,8 @@ $guardar = $conexion->query($consultaGEN);
             <td><?= htmlspecialchars($row['NOMBRE_MUC']) ?></td>
             <td><?= htmlspecialchars($row['APELLIDO_MUC']) ?></td>
             <td><?= htmlspecialchars($row['NOMBRE_DEP']) ?></td>
-            <td><?= htmlspecialchars($row['FECHA_NA']) ?></td>
+            <td><?= htmlspecialchars($row['FECHA_NA'] ?? '') ?></td>
+
 
             <!-- Botones Alergias y Premios -->
             <td><a href="alergias.php?id=<?= $row['ID_MUCHACHO'] ?>" class="btn btn-warning btn-sm">Alergias</a></td>

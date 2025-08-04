@@ -88,11 +88,11 @@ $registros = $conexion->query("SELECT * FROM datos_med WHERE ID_MUCHACHO = $id")
             <li><a class="dropdown-item" href="pioneros.php">Pioneros</a></li>
             <li><a class="dropdown-item" href="pioneras.php">Pioneras</a></li>
             <li><a class="dropdown-item" href="seguidores.php">Seguidores</a></li>
-            <li><a class="dropdown-item" href="señoritas.php">Señoritas</a></li>
+            <li><a class="dropdown-item" href="senoritas.php">Señoritas</a></li>
             <li><a class="dropdown-item" href="exploradores.php">Exploradores</a></li>
           </ul>
-        </li> 
-           
+        </li>
+
         <!-- Dropdown : Eventos -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="eventosDropdown"
@@ -112,7 +112,6 @@ $registros = $conexion->query("SELECT * FROM datos_med WHERE ID_MUCHACHO = $id")
   </div>
 </nav>
 <!-- FIN barra de navegación superior -->
-
 
   <div class="container my-5">
     <h2 class="text-warning mb-4">Datos Médicos de <?= htmlspecialchars($muchacho['NOMBRE_MUC'] . " " . $muchacho['APELLIDO_MUC']) ?></h2>

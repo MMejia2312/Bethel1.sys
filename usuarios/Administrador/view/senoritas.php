@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
 // ---------- Agregar ----------//
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['accion'] === 'agregar') {
     agregar_muchacho($_POST['nombre'], $_POST['apellido'], $_POST['departamento'], $_POST['fecha_na']);
-    header("Location: señoritas.php?ok=1");
+    header("Location: senoritas.php?ok=1");
     exit;
 }
 // ---------- Editar / Eliminar ----------//
@@ -36,11 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($_POST['accion'] === 'editar') {
         editar_muchacho($_POST['id'], $_POST['nombre'], $_POST['apellido'],
                          $_POST['departamento'], $_POST['fecha_na']);
-        header('Location: señoritas.php?ok=1'); exit;
+        header('Location: senoritas.php?ok=1'); exit;
     }
     if ($_POST['accion'] === 'eliminar') {
         eliminar_muchacho($_POST['id']);
-        header('Location: señoritas.php?eliminado=1'); exit;
+        header('Location: senoritas.php?eliminado=1'); exit;
     }
 }
 //----------------------------------------------------------------//
@@ -93,7 +93,7 @@ $guardar = $conexion->query($consultaGEN);
             <li><a class="dropdown-item" href="pioneros.php">Pioneros</a></li>
             <li><a class="dropdown-item" href="pioneras.php">Pioneras</a></li>
             <li><a class="dropdown-item" href="seguidores.php">Seguidores</a></li>
-            <li><a class="dropdown-item" href="señoritas.php">Señoritas</a></li>
+            <li><a class="dropdown-item" href="senoritas.php">Señoritas</a></li>
             <li><a class="dropdown-item" href="exploradores.php">Exploradores</a></li>
           </ul>
         </li>
@@ -186,7 +186,7 @@ $guardar = $conexion->query($consultaGEN);
             <td><?= htmlspecialchars($row['NOMBRE_MUC']) ?></td>
             <td><?= htmlspecialchars($row['APELLIDO_MUC']) ?></td>
             <td><?= htmlspecialchars($row['NOMBRE_DEP']) ?></td>
-            <td><?= htmlspecialchars($row['FECHA_NA']) ?></td>
+            <td><?= htmlspecialchars($row['FECHA_NA'] ?? '') ?></td>
 
             <!-- Botones Alergias y Premios -->
             <td><a href="alergias.php?id=<?= $row['ID_MUCHACHO'] ?>" class="btn btn-warning btn-sm">Alergias</a></td>
