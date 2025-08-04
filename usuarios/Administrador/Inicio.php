@@ -103,7 +103,7 @@ if ($query_premios && $row = $query_premios->fetch_assoc()) {
             <li><a class="dropdown-item" href="view/pioneros.php">Pioneros</a></li>
             <li><a class="dropdown-item" href="view/pioneras.php">Pioneras</a></li>
             <li><a class="dropdown-item" href="view/seguidores.php">Seguidores</a></li>
-            <li><a class="dropdown-item" href="view/señoritas.php">Señoritas</a></li>
+            <li><a class="dropdown-item" href="view/senoritas.php">Señoritas</a></li>
             <li><a class="dropdown-item" href="view/exploradores.php">Exploradores</a></li>
           </ul>
         </li>
@@ -284,7 +284,7 @@ if ($query_premios && $row = $query_premios->fetch_assoc()) {
       <!-- FIN Exploradores -->
 
       <!-- Señoritas -->
-      <a href="view/señoritas.php" style="width: 33%;">
+      <a href="view/senoritas.php" style="width: 33%;">
         <div class="card bg-dark">
           <img src="../../img/Señoitas.jpg" class="card-img-top" alt="" width="150px">
           <div class="card-body">
